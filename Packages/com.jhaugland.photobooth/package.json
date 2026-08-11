@@ -1,0 +1,22 @@
+{
+  "name": "com.jhaugland.photobooth",
+  "displayName": "Photobooth",
+  "version": "1.0.0",
+  "unity": "6000.0",
+  "description": "An Editor-only batch renderer for producing consistently framed PNG images from prefab assets.",
+  "keywords": [
+    "editor",
+    "prefab",
+    "rendering",
+    "screenshots",
+    "icons"
+  ],
+  "author": {
+    "name": "Jan Haugland",
+    "url": "https://github.com/JHaugland"
+  },
+  "license": "MIT",
+  "documentationUrl": "https://github.com/JHaugland/Photobooth#readme",
+  "changelogUrl": "https://github.com/JHaugland/Photobooth/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/JHaugland/Photobooth/blob/main/LICENSE.md"
+}
