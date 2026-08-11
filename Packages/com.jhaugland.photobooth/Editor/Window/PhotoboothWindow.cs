@@ -9,10 +9,6 @@ namespace Photobooth.Editor.Window
 {
     internal sealed class PhotoboothWindow : EditorWindow
     {
-        const string UserProfileDirectory = "Assets/Photobooth";
-        const string UserProfilePath =
-            UserProfileDirectory + "/DefaultPhotoboothProfile.asset";
-
         [SerializeField]
         PhotoboothProfile profile;
 
@@ -347,20 +343,24 @@ namespace Photobooth.Editor.Window
             }
 
             var userProfile =
-                AssetDatabase.LoadAssetAtPath<PhotoboothProfile>(UserProfilePath);
+                AssetDatabase.LoadAssetAtPath<PhotoboothProfile>(
+                    PhotoboothAssetPaths.UserProfilePath);
             if (userProfile != null)
                 return userProfile;
 
-            if (!AssetDatabase.IsValidFolder(UserProfileDirectory))
-                AssetDatabase.CreateFolder("Assets", "Photobooth");
-            if (!AssetDatabase.CopyAsset(templatePath, UserProfilePath))
+            PhotoboothAssetPaths.EnsureUserAssetDirectory();
+            if (!AssetDatabase.CopyAsset(
+                    templatePath,
+                    PhotoboothAssetPaths.UserProfilePath))
             {
                 throw new InvalidOperationException(
-                    $"Could not create an editable profile at '{UserProfilePath}'.");
+                    "Could not create an editable profile at " +
+                    $"'{PhotoboothAssetPaths.UserProfilePath}'.");
             }
 
             AssetDatabase.SaveAssets();
-            return AssetDatabase.LoadAssetAtPath<PhotoboothProfile>(UserProfilePath);
+            return AssetDatabase.LoadAssetAtPath<PhotoboothProfile>(
+                PhotoboothAssetPaths.UserProfilePath);
         }
 
         void SetError(Exception exception)

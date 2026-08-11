@@ -26,7 +26,8 @@ namespace Photobooth.Editor.Stage
         {
             if (stagePrefab == null)
                 throw new ArgumentNullException(nameof(stagePrefab));
-            string stageScenePath = PhotoboothAssetPaths.StageScenePath;
+            string stageScenePath =
+                PhotoboothAssetPaths.EnsureWritableStageScene();
             if (AssetDatabase.LoadAssetAtPath<SceneAsset>(stageScenePath) == null)
             {
                 throw new InvalidOperationException(

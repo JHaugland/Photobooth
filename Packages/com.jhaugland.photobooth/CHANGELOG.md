@@ -2,6 +2,13 @@
 
 All notable changes to this package are documented here.
 
+## [1.0.1] - 2026-08-11
+
+### Fixed
+
+- Copy the empty staging scene to a writable project folder before opening it
+  when Photobooth is installed as a read-only UPM package.
+
 ## [1.0.0] - 2026-08-11
 
 ### Added
