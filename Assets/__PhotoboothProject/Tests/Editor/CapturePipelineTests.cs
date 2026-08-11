@@ -190,6 +190,7 @@ namespace Photobooth.Editor.Tests
                 "Assets/__PhotoboothProject/Tests/CaptureFixtures";
             const string prefabPath = fixtureFolder + "/TestCube.prefab";
             PhotoboothProfile profile = null;
+            GameObject sceneContaminant = null;
 
             try
             {
@@ -198,6 +199,11 @@ namespace Photobooth.Editor.Tests
                     "Assets/__PhotoboothProject/Tests",
                     "CaptureFixtures");
                 CreateCubePrefab(prefabPath);
+                sceneContaminant = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                sceneContaminant.name = "Open Scene Contaminant";
+                sceneContaminant.transform.position = new Vector3(0f, 0.5f, -1f);
+                sceneContaminant.transform.localScale =
+                    new Vector3(100f, 100f, 0.1f);
 
                 profile = ScriptableObject.CreateInstance<PhotoboothProfile>();
                 var serializedProfile = new SerializedObject(profile);
@@ -231,6 +237,8 @@ namespace Photobooth.Editor.Tests
             {
                 if (profile != null)
                     UnityEngine.Object.DestroyImmediate(profile);
+                if (sceneContaminant != null)
+                    UnityEngine.Object.DestroyImmediate(sceneContaminant);
                 AssetDatabase.DeleteAsset(fixtureFolder);
             }
         }

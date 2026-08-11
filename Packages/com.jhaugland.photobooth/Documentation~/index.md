@@ -25,11 +25,11 @@ In **Window > Package Management > Package Manager**, choose
 https://github.com/JHaugland/Photobooth.git?path=/Packages/com.jhaugland.photobooth
 ```
 
-You can pin a release by appending `#v1.0.1`.
+You can pin a release by appending `#v1.0.2`.
 
 ### Unity package file
 
-Download `Photobooth-1.0.1.unitypackage` from the GitHub release and import it
+Download `Photobooth-1.0.2.unitypackage` from the GitHub release and import it
 through **Assets > Import Package > Custom Package**.
 
 ## Quick start
@@ -77,6 +77,7 @@ three-quarter, and elevated three-quarter views.
 - The package contains no runtime assembly or runtime component.
 - The staging scene is not added to Build Settings.
 - Captures never modify or save the user's open scenes.
+- The capture camera renders only the isolated staging scene.
 - Each subject is instantiated only in a temporary additive staging scene.
 - The previous active scene is restored immediately after staging opens.
 - Subjects and staging scenes are destroyed or closed after capture and errors.
@@ -141,6 +142,8 @@ and invalid stage structures report explicit errors.
 
 **The output is missing:** project-relative paths are resolved from the Unity
 project root, not from the repository's primary checkout or another worktree.
+Windows absolute paths may use drive-letter or UNC syntax; paths copied with
+surrounding quotes are accepted.
 
 **Materials render incorrectly:** confirm that the imported asset materials are
 compatible with the destination project's active render pipeline.

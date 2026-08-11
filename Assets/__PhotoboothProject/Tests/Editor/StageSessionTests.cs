@@ -52,6 +52,9 @@ namespace Photobooth.Editor.Tests
                 Assert.That(
                     stageScene.path,
                     Is.EqualTo(PhotoboothAssetPaths.WritableStageScenePath));
+                Assert.That(
+                    session.CaptureCamera.scene,
+                    Is.EqualTo(stageScene));
                 Assert.That(SceneManager.sceneCount, Is.EqualTo(initialSceneCount + 1));
                 Assert.That(SceneManager.GetActiveScene(), Is.EqualTo(activeScene));
             }

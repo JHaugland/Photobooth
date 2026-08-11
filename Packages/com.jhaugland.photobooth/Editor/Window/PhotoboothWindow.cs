@@ -36,7 +36,7 @@ namespace Photobooth.Editor.Window
 
         void OnEnable()
         {
-            if (profile == null)
+            if (profile == null || IsPackageAsset(profile))
                 profile = LoadDefaultProfile();
 
             RebuildProfileEditor();
@@ -76,7 +76,7 @@ namespace Photobooth.Editor.Window
                 false);
             if (EditorGUI.EndChangeCheck())
             {
-                profile = selectedProfile;
+                profile = EnsureEditableProfile(selectedProfile);
                 RebuildProfileEditor();
                 RefreshQueue();
             }
@@ -362,6 +362,19 @@ namespace Photobooth.Editor.Window
             return AssetDatabase.LoadAssetAtPath<PhotoboothProfile>(
                 PhotoboothAssetPaths.UserProfilePath);
         }
+
+        internal static PhotoboothProfile EnsureEditableProfile(
+            PhotoboothProfile selectedProfile)
+        {
+            return selectedProfile != null && IsPackageAsset(selectedProfile)
+                ? LoadDefaultProfile()
+                : selectedProfile;
+        }
+
+        static bool IsPackageAsset(PhotoboothProfile selectedProfile) =>
+            AssetDatabase.GetAssetPath(selectedProfile).StartsWith(
+                "Packages/",
+                StringComparison.Ordinal);
 
         void SetError(Exception exception)
         {

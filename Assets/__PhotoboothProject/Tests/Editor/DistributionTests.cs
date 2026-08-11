@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Photobooth.Editor.Configuration;
+using Photobooth.Editor.Window;
 using UnityEditor;
 using UnityEngine;
 
@@ -114,6 +115,22 @@ namespace Photobooth.Editor.Tests
             Assert.That(
                 AssetDatabase.LoadAssetAtPath<SceneAsset>(secondPath),
                 Is.Not.Null);
+        }
+
+        [Test]
+        public void PackageProfile_IsRedirectedToWritableProjectCopy()
+        {
+            PhotoboothProfile packageProfile =
+                AssetDatabase.LoadAssetAtPath<PhotoboothProfile>(
+                    PhotoboothAssetPaths.DefaultProfilePath);
+
+            PhotoboothProfile editableProfile =
+                PhotoboothWindow.EnsureEditableProfile(packageProfile);
+
+            Assert.That(editableProfile, Is.Not.Null);
+            Assert.That(
+                AssetDatabase.GetAssetPath(editableProfile),
+                Is.EqualTo(PhotoboothAssetPaths.UserProfilePath));
         }
     }
 }

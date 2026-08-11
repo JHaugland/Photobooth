@@ -1,7 +1,7 @@
 {
   "name": "com.jhaugland.photobooth",
   "displayName": "Photobooth",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "unity": "6000.0",
   "description": "An Editor-only batch renderer for producing consistently framed PNG images from prefab assets.",
   "keywords": [
