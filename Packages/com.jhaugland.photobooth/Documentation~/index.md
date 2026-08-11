@@ -25,11 +25,11 @@ In **Window > Package Management > Package Manager**, choose
 https://github.com/JHaugland/Photobooth.git?path=/Packages/com.jhaugland.photobooth
 ```
 
-You can pin a release by appending `#v1.0.0`.
+You can pin a release by appending `#v1.0.1`.
 
 ### Unity package file
 
-Download `Photobooth-1.0.0.unitypackage` from the GitHub release and import it
+Download `Photobooth-1.0.1.unitypackage` from the GitHub release and import it
 through **Assets > Import Package > Custom Package**.
 
 ## Quick start
@@ -42,15 +42,17 @@ through **Assets > Import Package > Custom Package**.
 6. Select **Refresh Queue**, then **Start Batch**.
 
 Git-installed packages are read-only. On first use, Photobooth creates an
-editable profile at:
+editable profile and a writable copy of its empty internal staging scene at:
 
 ```text
 Assets/Photobooth/DefaultPhotoboothProfile.asset
+Assets/Photobooth/Internal/PhotoboothCaptureStage.unity
 ```
 
-This is the only project asset the UPM installation creates automatically.
-The `.unitypackage` installation keeps its editable profile within the imported
-Photobooth folder.
+These are the only project assets the UPM installation creates automatically.
+The staging scene is internal infrastructure: do not add it to Build Settings.
+The `.unitypackage` installation keeps its editable profile and staging scene
+within the imported Photobooth folder.
 
 ## Capture profile
 

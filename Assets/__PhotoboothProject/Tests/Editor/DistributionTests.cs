@@ -83,9 +83,37 @@ namespace Photobooth.Editor.Tests
         [Test]
         public void StagingScene_IsNotIncludedInBuildSettings()
         {
+            string writableStageScene =
+                PhotoboothAssetPaths.EnsureWritableStageScene();
+
             Assert.That(
                 EditorBuildSettings.scenes.Select(scene => scene.path),
                 Does.Not.Contain(PhotoboothAssetPaths.StageScenePath));
+            Assert.That(
+                EditorBuildSettings.scenes.Select(scene => scene.path),
+                Does.Not.Contain(writableStageScene));
+        }
+
+        [Test]
+        public void StagingScene_FromPackageIsCopiedToWritableProjectFolder()
+        {
+            AssetDatabase.DeleteAsset(PhotoboothAssetPaths.WritableStageDirectory);
+
+            string firstPath = PhotoboothAssetPaths.EnsureWritableStageScene();
+            string firstGuid = AssetDatabase.AssetPathToGUID(firstPath);
+            string secondPath = PhotoboothAssetPaths.EnsureWritableStageScene();
+
+            Assert.That(
+                PhotoboothAssetPaths.StageScenePath,
+                Does.StartWith("Packages/"));
+            Assert.That(
+                firstPath,
+                Is.EqualTo(PhotoboothAssetPaths.WritableStageScenePath));
+            Assert.That(secondPath, Is.EqualTo(firstPath));
+            Assert.That(AssetDatabase.AssetPathToGUID(secondPath), Is.EqualTo(firstGuid));
+            Assert.That(
+                AssetDatabase.LoadAssetAtPath<SceneAsset>(secondPath),
+                Is.Not.Null);
         }
     }
 }

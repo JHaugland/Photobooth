@@ -15,7 +15,7 @@ angles, and captures them in an isolated staging scene.
 - Atomic writes with skip, overwrite, and unique-name policies
 - Incremental batches with progress, cancellation, and per-item recovery
 - No changes to open scenes, prefabs, Build Settings, or runtime assemblies
-- 40 EditMode tests covering capture behavior and distribution safety
+- 41 EditMode tests covering capture behavior and distribution safety
 
 ## Install
 
@@ -27,11 +27,11 @@ In Unity's Package Manager, choose **Install package from git URL**:
 https://github.com/JHaugland/Photobooth.git?path=/Packages/com.jhaugland.photobooth
 ```
 
-Append `#v1.0.0` to pin the first release.
+Append `#v1.0.1` to pin the patched release.
 
 ### Unity package
 
-Download `Photobooth-1.0.0.unitypackage` from the matching GitHub release and
+Download `Photobooth-1.0.1.unitypackage` from the matching GitHub release and
 import it through **Assets > Import Package > Custom Package**.
 
 ## Use
