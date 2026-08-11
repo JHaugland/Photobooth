@@ -8,7 +8,57 @@ namespace Photobooth.Editor.Configuration
     {
         public override void OnInspectorGUI()
         {
-            DrawDefaultInspector();
+            serializedObject.Update();
+
+            EditorGUILayout.LabelField("Input", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("sourceFolder"));
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("includeSubfolders"));
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Output", EditorStyles.boldLabel);
+            SerializedProperty outputMode =
+                serializedObject.FindProperty("outputPathMode");
+            EditorGUILayout.PropertyField(outputMode);
+            string outputPropertyName =
+                outputMode.enumValueIndex == (int)OutputPathMode.Absolute
+                    ? "absoluteOutputPath"
+                    : "projectRelativeOutputPath";
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty(outputPropertyName));
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("existingFilePolicy"));
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("filenamePattern"));
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Capture", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("captureWidth"));
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("captureHeight"));
+            SerializedProperty transparentBackground =
+                serializedObject.FindProperty("transparentBackground");
+            EditorGUILayout.PropertyField(transparentBackground);
+            if (!transparentBackground.boolValue)
+            {
+                EditorGUILayout.PropertyField(
+                    serializedObject.FindProperty("backgroundColor"));
+            }
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Stage", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("stagePrefab"));
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Camera Presets", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("cameraPresets"),
+                true);
+
+            serializedObject.ApplyModifiedProperties();
 
             var profile = (PhotoboothProfile)target;
             DrawValidationMessages(profile);

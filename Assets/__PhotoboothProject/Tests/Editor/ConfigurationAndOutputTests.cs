@@ -161,6 +161,30 @@ namespace Photobooth.Editor.Tests
         }
 
         [Test]
+        public void ResolveOutputDirectory_MigratesAbsolutePathFromRelativeField()
+        {
+            if (Application.platform != RuntimePlatform.WindowsEditor)
+                Assert.Ignore("Windows path validation only applies on Windows.");
+            profile = CreateProfile();
+            var serialized = new SerializedObject(profile);
+            serialized.FindProperty("outputPathMode").enumValueIndex =
+                (int)OutputPathMode.Absolute;
+            serialized.FindProperty("absoluteOutputPath").stringValue =
+                string.Empty;
+            serialized.FindProperty("projectRelativeOutputPath").stringValue =
+                "E:\\Unity Projects\\PhotoboothOutput\\GridObjects";
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+
+            string resolved =
+                CaptureOutputPathResolver.ResolveOutputDirectory(profile);
+
+            Assert.That(
+                resolved,
+                Is.EqualTo(
+                    "E:\\Unity Projects\\PhotoboothOutput\\GridObjects"));
+        }
+
+        [Test]
         public void WriteFile_OverwriteReplacesContentsWithoutLeavingTemporaryFile()
         {
             string outputPath = Path.Combine(temporaryDirectory, "capture.png");

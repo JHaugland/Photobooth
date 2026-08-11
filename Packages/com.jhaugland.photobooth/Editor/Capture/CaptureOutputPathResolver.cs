@@ -28,6 +28,13 @@ namespace Photobooth.Editor.Capture
             if (profile.OutputPathMode == OutputPathMode.Absolute)
             {
                 string absolutePath = NormalizePathInput(profile.AbsoluteOutputPath);
+                string misplacedPath = NormalizePathInput(
+                    profile.ProjectRelativeOutputPath);
+                if (string.IsNullOrEmpty(absolutePath) &&
+                    IsFullyQualifiedPath(misplacedPath))
+                {
+                    absolutePath = misplacedPath;
+                }
                 if (!IsFullyQualifiedPath(absolutePath))
                 {
                     throw new InvalidOperationException(

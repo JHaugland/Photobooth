@@ -13,6 +13,7 @@ namespace Photobooth.Editor.Stage
     {
         readonly Scene stageScene;
         readonly Scene originalActiveScene;
+        readonly int isolatedLayer;
         GameObject stageInstance;
         bool disposed;
 
@@ -21,6 +22,7 @@ namespace Photobooth.Editor.Stage
         internal Transform SpawnPoint { get; }
         internal Transform CameraTarget { get; }
         internal Transform LightingRig { get; }
+        internal int IsolatedLayer => isolatedLayer;
 
         internal PhotoboothStageSession(GameObject stagePrefab)
         {
@@ -42,9 +44,11 @@ namespace Photobooth.Editor.Stage
             try
             {
                 RestoreActiveScene();
+                isolatedLayer = FindUnusedLayer(stageScene);
                 stageInstance = (GameObject)PrefabUtility.InstantiatePrefab(
                     stagePrefab,
                     stageScene);
+                ConfigureCaptureHierarchy(stageInstance);
                 CaptureCamera = FindRequiredComponent<Camera>(
                     stageInstance.transform,
                     "CameraRig/CaptureCamera",
@@ -62,6 +66,7 @@ namespace Photobooth.Editor.Stage
                     "Lighting",
                     stagePrefab.name);
                 CaptureCamera.scene = stageScene;
+                CaptureCamera.cullingMask = 1 << isolatedLayer;
                 if (CaptureCamera == null ||
                     SpawnPoint == null ||
                     CameraTarget == null ||
@@ -87,6 +92,7 @@ namespace Photobooth.Editor.Stage
             var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, stageScene);
             try
             {
+                ConfigureCaptureHierarchy(instance);
                 instance.transform.SetParent(SpawnPoint, false);
                 Bounds bounds = SubjectPlacementService.CenterAndGround(
                     instance,
@@ -179,6 +185,45 @@ namespace Photobooth.Editor.Stage
             LightingRig.rotation = Quaternion.LookRotation(
                 viewingDirection.normalized,
                 Vector3.up);
+        }
+
+        void ConfigureCaptureHierarchy(GameObject root)
+        {
+            int captureMask = 1 << isolatedLayer;
+            foreach (Transform child in root.GetComponentsInChildren<Transform>(true))
+                child.gameObject.layer = isolatedLayer;
+            foreach (Light light in root.GetComponentsInChildren<Light>(true))
+                light.cullingMask = captureMask;
+        }
+
+        static int FindUnusedLayer(Scene stagingScene)
+        {
+            var usedLayers = new bool[32];
+            for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+            {
+                Scene scene = SceneManager.GetSceneAt(sceneIndex);
+                if (!scene.IsValid() || !scene.isLoaded || scene == stagingScene)
+                    continue;
+
+                foreach (GameObject root in scene.GetRootGameObjects())
+                {
+                    foreach (Transform child in
+                             root.GetComponentsInChildren<Transform>(true))
+                    {
+                        usedLayers[child.gameObject.layer] = true;
+                    }
+                }
+            }
+
+            for (int layer = 31; layer >= 0; layer--)
+            {
+                if (!usedLayers[layer])
+                    return layer;
+            }
+
+            throw new InvalidOperationException(
+                "Photobooth cannot isolate its capture because every Unity " +
+                "layer is currently used by an object in an open scene.");
         }
 
         static Transform FindRequiredTransform(

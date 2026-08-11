@@ -2,6 +2,16 @@
 
 All notable changes to this package are documented here.
 
+## [1.0.3] - 2026-08-11
+
+### Fixed
+
+- Add render-layer isolation in addition to camera scene isolation for render
+  pipelines that do not honor `Camera.scene` during explicit rendering.
+- Show only the output path field selected by Output Path Mode.
+- Migrate a fully qualified path previously entered in the project-relative
+  field when Absolute mode is selected.
+
 ## [1.0.2] - 2026-08-11
 
 ### Fixed
