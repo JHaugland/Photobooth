@@ -1,0 +1,40 @@
+name: Build release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate tag and build package
+        shell: pwsh
+        run: |
+          $manifest = Get-Content `
+            "Packages/com.jhaugland.photobooth/package.json" `
+            -Raw | ConvertFrom-Json
+          $expectedTag = "v$($manifest.version)"
+          if ("${{ github.ref_name }}" -ne $expectedTag) {
+            throw "Tag '${{ github.ref_name }}' does not match package version '$expectedTag'."
+          }
+          ./Distribution/Build-UnityPackage.ps1
+
+      - name: Create GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" `
+            "Dist/Photobooth-${{ github.ref_name }}.unitypackage".Replace("-v", "-") `
+            "Dist/SHA256SUMS.txt" `
+            --generate-notes `
+            --title "Photobooth ${{ github.ref_name }}"

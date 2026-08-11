@@ -1,0 +1,21 @@
+{
+  "name": "Photobooth.Editor.Tests",
+  "rootNamespace": "Photobooth.Editor.Tests",
+  "references": [
+    "Photobooth.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
