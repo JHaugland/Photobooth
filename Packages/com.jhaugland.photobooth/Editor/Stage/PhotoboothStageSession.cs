@@ -38,10 +38,10 @@ namespace Photobooth.Editor.Stage
             stageScene = EditorSceneManager.OpenScene(
                 stageScenePath,
                 OpenSceneMode.Additive);
-            RestoreActiveScene();
 
             try
             {
+                RestoreActiveScene();
                 stageInstance = (GameObject)PrefabUtility.InstantiatePrefab(
                     stagePrefab,
                     stageScene);
@@ -61,6 +61,7 @@ namespace Photobooth.Editor.Stage
                     stageInstance.transform,
                     "Lighting",
                     stagePrefab.name);
+                CaptureCamera.scene = stageScene;
                 if (CaptureCamera == null ||
                     SpawnPoint == null ||
                     CameraTarget == null ||

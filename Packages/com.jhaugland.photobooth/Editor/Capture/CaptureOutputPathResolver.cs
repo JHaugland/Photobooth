@@ -27,18 +27,21 @@ namespace Photobooth.Editor.Capture
 
             if (profile.OutputPathMode == OutputPathMode.Absolute)
             {
-                if (string.IsNullOrWhiteSpace(profile.AbsoluteOutputPath) ||
-                    !Path.IsPathFullyQualified(profile.AbsoluteOutputPath))
+                string absolutePath = NormalizePathInput(profile.AbsoluteOutputPath);
+                if (!IsFullyQualifiedPath(absolutePath))
                 {
                     throw new InvalidOperationException(
-                        "The profile requires a fully qualified absolute output path.");
+                        "The profile requires a fully qualified absolute output " +
+                        $"path. Received '{profile.AbsoluteOutputPath}'.");
                 }
 
-                return Path.GetFullPath(profile.AbsoluteOutputPath);
+                return Path.GetFullPath(absolutePath);
             }
 
-            string relativePath = profile.ProjectRelativeOutputPath;
-            if (string.IsNullOrWhiteSpace(relativePath) || Path.IsPathFullyQualified(relativePath))
+            string relativePath = NormalizePathInput(
+                profile.ProjectRelativeOutputPath);
+            if (string.IsNullOrWhiteSpace(relativePath) ||
+                IsFullyQualifiedPath(relativePath))
             {
                 throw new InvalidOperationException(
                     "The profile requires an output path relative to the Unity project.");
@@ -53,6 +56,27 @@ namespace Photobooth.Editor.Capture
             }
 
             return outputPath;
+        }
+
+        internal static bool IsFullyQualifiedPath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+            if (Path.IsPathFullyQualified(path))
+                return true;
+            if (Application.platform != RuntimePlatform.WindowsEditor)
+                return false;
+
+            bool driveRooted =
+                path.Length >= 3 &&
+                char.IsLetter(path[0]) &&
+                path[1] == ':' &&
+                IsDirectorySeparator(path[2]);
+            bool uncRooted =
+                path.Length >= 2 &&
+                IsDirectorySeparator(path[0]) &&
+                IsDirectorySeparator(path[1]);
+            return driveRooted || uncRooted;
         }
 
         internal static CaptureFilePlan ResolveFile(
@@ -141,5 +165,24 @@ namespace Photobooth.Editor.Capture
             path.TrimEnd(
                 Path.DirectorySeparatorChar,
                 Path.AltDirectorySeparatorChar);
+
+        static string NormalizePathInput(string path)
+        {
+            string normalized = path?.Trim() ?? string.Empty;
+            if (normalized.Length >= 2 &&
+                normalized[0] == '"' &&
+                normalized[normalized.Length - 1] == '"')
+            {
+                normalized = normalized.Substring(1, normalized.Length - 2).Trim();
+            }
+
+            return normalized;
+        }
+
+        static bool IsDirectorySeparator(char value) =>
+            value == Path.DirectorySeparatorChar ||
+            value == Path.AltDirectorySeparatorChar ||
+            value == '\\' ||
+            value == '/';
     }
 }

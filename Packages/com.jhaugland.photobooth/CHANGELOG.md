@@ -2,6 +2,16 @@
 
 All notable changes to this package are documented here.
 
+## [1.0.2] - 2026-08-11
+
+### Fixed
+
+- Restrict the capture camera to the isolated staging scene so objects in open
+  user scenes cannot appear in generated images.
+- Redirect retained package-template profiles to the writable project copy.
+- Accept fully qualified Windows drive and UNC paths, including paths pasted
+  with surrounding quotes.
+
 ## [1.0.1] - 2026-08-11
 
 ### Fixed
