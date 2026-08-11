@@ -25,11 +25,11 @@ In **Window > Package Management > Package Manager**, choose
 https://github.com/JHaugland/Photobooth.git?path=/Packages/com.jhaugland.photobooth
 ```
 
-You can pin a release by appending `#v1.0.2`.
+You can pin a release by appending `#v1.0.3`.
 
 ### Unity package file
 
-Download `Photobooth-1.0.2.unitypackage` from the GitHub release and import it
+Download `Photobooth-1.0.3.unitypackage` from the GitHub release and import it
 through **Assets > Import Package > Custom Package**.
 
 ## Quick start
@@ -78,6 +78,7 @@ three-quarter, and elevated three-quarter views.
 - The staging scene is not added to Build Settings.
 - Captures never modify or save the user's open scenes.
 - The capture camera renders only the isolated staging scene.
+- Staged objects also use a layer unused by every open user scene.
 - Each subject is instantiated only in a temporary additive staging scene.
 - The previous active scene is restored immediately after staging opens.
 - Subjects and staging scenes are destroyed or closed after capture and errors.

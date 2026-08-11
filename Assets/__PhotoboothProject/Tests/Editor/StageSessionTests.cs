@@ -55,6 +55,9 @@ namespace Photobooth.Editor.Tests
                 Assert.That(
                     session.CaptureCamera.scene,
                     Is.EqualTo(stageScene));
+                Assert.That(
+                    session.CaptureCamera.cullingMask,
+                    Is.EqualTo(1 << session.IsolatedLayer));
                 Assert.That(SceneManager.sceneCount, Is.EqualTo(initialSceneCount + 1));
                 Assert.That(SceneManager.GetActiveScene(), Is.EqualTo(activeScene));
             }
